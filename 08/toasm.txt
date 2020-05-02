@@ -1,0 +1,218 @@
+"
+First, Implement exactly as they recommend. The tests assume the implementation will be as given in the lectures, so best to follow it exactly, even if you see alternate ways to do things. For example, I noticed that if I reorganized where certain code was in the call and return, I could get away without keeping "temp" variables (as they propose) and thus could make the implementation slightly more efficient. However, this broke certain assumptions in the grader that expected the "return" to do certain things and the "call" to do certain things. So I had to reimplement exactly as given in the lectures.
+
+Second, when they say the bootstrap code must "Call" Sys.init, they really mean call. In this case, there is no value of saving the frame, as there will never be any return from Sys.init to the bootstrap area of the code. Sys.init's contract is to endlessly loop at the end. However, simply replacing a "full" call with a simple jump to (Sys.init) will again cause the tests to fail, as they assume Sys.init will start with its stack at 261, not 256. It took me a few double takes to figure out why the tests were failing.
+"
+
+BRANCHING
+
+Context:
+  File: File.vm
+  Func: foo
+
+[1]
+
+label LOOP_START  ->   (File.foo$LOOP_START)
+
+[2]
+
+if-goto LOOP_START
+
+* pop topmost stack
+* if != 0, do jump, else, ignore
+
+@SP
+AM=M-1
+D=M
+@File.foo$LOOP_START
+D;JNE
+
+[3]
+
+goto LOOP_START
+
+* unconditional jump
+
+@File.foo$LOOP_START
+0;JMP
+
+FUNCTIONS
+
+Context:
+  File: File.vm
+[4]
+
+function <name> <x> -> (File.<name>)
+LCL = SP, (for loop x set to zero required)
+SP = SP+x
+
+(File.<name>)
+@SP
+D=M
+@LCL
+M=D    // set LCL to SP
+@x
+D=A
+@SP
+M=M+D  // advance SP + x (to give way to LCL)
+
+@File.<name>$lcl_init_ignore
+D;JEQ
+
+// loop LCL for cleaning
+@R13
+M=D   // times to loop
+@R14
+M=0  // counter
+
+(File.<name>$lcl_init_loop)
+@R14
+D=M   // restore counter
+@LCL
+A=D+M
+M=0
+@R14
+MD=D+1  // inc counter
+@R13
+D=D-M
+@File.<name>$lcl_init_loop
+D;JLT
+(File.<name>$lcl_init_ignore)
+
+[5]
+
+return
+
+// get return addr, save to R13. Return addr is always -5 from LCL
+@5
+D=A
+@LCL
+A=M-D // jump to return addr in stack
+D=M
+@R13
+M=D   // save ret addr to R13
+
+// set return val
+@SP
+A=M-1 // get value from topmost of stack (behind SP)
+D=M
+
+@ARG // set value to where ARG is pointing (start of args passed to func)
+A=M
+M=D
+
+// reposition SP to "clear" callee stack, ARG+1
+@ARG
+D=M+1
+@SP
+M=D
+
+// restore mem seg, LCL upwards
+@LCL
+AM=M-1
+D=M
+@THAT
+M=D
+
+@LCL
+AM=M-1
+D=M
+@THIS
+M=D
+
+@LCL
+AM=M-1
+D=M
+@ARG
+M=D
+
+@LCL
+AM=M-1
+D=M
+@LCL
+M=D
+
+// jump back to return address
+@13
+A=M
+0;JMP
+
+[6]
+
+call
+
+call <name> <y>
+
+1) Save frames (ret addr, LCL, ARG, THIS, THAT)
+2) Move ARG
+3) JMP
+
+@File.caller$ret.i // save ret addr
+D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+
+@LCL // LCL
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+
+@LCL // ARG
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+
+@LCL // THIS
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+
+@LCL // THAT
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+
+// move arg since we've saved it
+@5
+D=A
+@y
+D=D+A
+@SP
+D=M-D
+@ARG
+M=D
+
+//jump to func
+@File.callee
+0;JMP
+(File.caller$ret.i) // jump back after this
+
+
+[7]
+
+Bootstrap
+
+SP=256
+call Sys.init
+
+@256
+D=A
+@SP
+M=D
+@Sys.init
+0;JMP
