@@ -1,0 +1,62 @@
+/** Implements HashMap Node */
+class MapNode {
+    field int key;
+    field int val;
+    field MapNode next;
+
+    constructor MapNode new(int keyArg, int valArg, MapNode nextArg) {
+        let key = keyArg;
+        let val = valArg;
+        let next = nextArg;
+        return this;
+    }
+
+    method int getKey() { return key; }
+    method int getVal() { return val; }
+    method void setVal(int valArg) {
+        let val = valArg;
+        return;
+    }
+
+    method int getNext() { return next; }
+    method void setNext(MapNode nextArg) {
+        let next = nextArg;
+        return;
+    }
+
+    // Pretty print of the node chain
+    method void printChain() {
+        var MapNode trav;
+        let trav = this;
+        while(~(trav.getNext() = null)) {
+            do Output.printChar(40);
+            do Output.printInt(trav.getKey());
+            do Output.printChar(44);
+            do Output.printInt(trav.getVal());
+            do Output.printChar(41);
+            do Output.printChar(45);
+            do Output.printChar(62);
+            let trav = trav.getNext();
+        }
+        do Output.printChar(40);
+        do Output.printInt(trav.getKey());
+        do Output.printChar(44);
+        do Output.printInt(trav.getVal());
+        do Output.printChar(41);
+        return;
+    }
+
+    // Disposes node chain
+    method void dispose() {
+        var MapNode cur, nxt;
+        let cur = this;
+        let nxt = cur.getNext();
+        while(~(nxt = null)) {
+            do Memory.deAlloc(cur);
+            let cur = nxt;
+            let nxt = nxt.getNext();
+        }
+        do Memory.deAlloc(cur);
+        return;
+    }
+}

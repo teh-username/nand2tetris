@@ -1,0 +1,125 @@
+/** Implements a HashMap like data structure for Jack */
+class Map {
+    field Array buckets;
+    field int bucketLen;
+
+    constructor Map new(int len) {
+        let buckets = Array.new(len);
+        let bucketLen = len;
+        return this;
+    }
+
+    // If key exists, returns value pair.
+    // If key does not exist, returns failtInt.
+    method int get(int key, int failInt){
+        var MapNode node;
+        let node = _retrieveNodeByKey(key);
+        if (node = 0) {
+            return failInt;
+        }
+        return node.getVal();
+    }
+
+    // Sets key, value pair in map.
+    // If key already exists, overwrite the value.
+    method void set(int key, int value) {
+        var int hash;
+        var MapNode node, trav;
+        let hash = _computeHash(key);
+        if (buckets[hash] = 0) {
+            let node = MapNode.new(key, value, null);
+            let buckets[hash] = node;
+        } else {
+            let trav = buckets[hash];
+            if(trav.getKey() = key) {
+                do trav.setVal(value);
+                return;
+            }
+            while(~(trav.getNext() = null)) {
+                let trav = trav.getNext();
+                if(trav.getKey() = key) {
+                    do trav.setVal(value);
+                    return;
+                }
+            }
+            do trav.setNext(MapNode.new(key, value, null));
+        }
+        return;
+    }
+
+    // True if key already exists, false otherwise.
+    method boolean keyExists(int key){
+        var MapNode node;
+        let node = _retrieveNodeByKey(key);
+        if (node = 0) {
+            return false;
+        }
+        return true;
+    }
+
+    // Helper for finding a node given a key
+    method MapNode _retrieveNodeByKey(int key) {
+        var MapNode node, trav;
+        let node = buckets[_computeHash(key)];
+        if (node = 0) {
+            return null;
+        }
+        let trav = node;
+        while(~(trav = null)) {
+            if (trav.getKey() = key) {
+                return trav;
+            }
+            let trav = trav.getNext();
+        }
+        return null;
+    }
+
+    // key % bucketLen
+    method int _computeHash(int key){
+        return key - (bucketLen * (key / bucketLen));
+    }
+
+    /*
+        Prints the map as:
+        [
+            0,
+            (k, v) -> (k, v) -> (k, v)
+            (k, v)
+        ]
+    */
+    method void print() {
+        var int ctr;
+        var MapNode trav;
+        let ctr = 0;
+        do Output.printChar(91);
+        do Output.println();
+        while (ctr < bucketLen) {
+            let trav = buckets[ctr];
+            if (trav = 0) {
+                do Output.printInt(0);
+            } else {
+                do trav.printChain();
+            }
+            do Output.printChar(44);
+            do Output.println();
+            let ctr = ctr + 1;
+        }
+        do Output.printChar(93);
+        return;
+    }
+
+    method void dispose() {
+        var int ctr;
+        var MapNode trav;
+        let ctr = 0;
+        while (ctr < bucketLen) {
+            let trav = buckets[ctr];
+            if (~(trav = 0)) {
+                do trav.dispose();
+            }
+            let ctr = ctr + 1;
+        }
+        do Memory.deAlloc(this);
+        return;
+    }
+}

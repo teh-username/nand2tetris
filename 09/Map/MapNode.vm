@@ -1,0 +1,131 @@
+function MapNode.new 0
+push constant 3
+call Memory.alloc 1
+pop pointer 0
+push argument 0
+pop this 0
+push argument 1
+pop this 1
+push argument 2
+pop this 2
+push pointer 0
+return
+function MapNode.getKey 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function MapNode.getVal 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function MapNode.setVal 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 1
+push constant 0
+return
+function MapNode.getNext 0
+push argument 0
+pop pointer 0
+push this 2
+return
+function MapNode.setNext 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 2
+push constant 0
+return
+function MapNode.printChain 1
+push argument 0
+pop pointer 0
+push pointer 0
+pop local 0
+label WHILE_EXP0
+push local 0
+call MapNode.getNext 1
+push constant 0
+eq
+not
+not
+if-goto WHILE_END0
+push constant 40
+call Output.printChar 1
+pop temp 0
+push local 0
+call MapNode.getKey 1
+call Output.printInt 1
+pop temp 0
+push constant 44
+call Output.printChar 1
+pop temp 0
+push local 0
+call MapNode.getVal 1
+call Output.printInt 1
+pop temp 0
+push constant 41
+call Output.printChar 1
+pop temp 0
+push constant 45
+call Output.printChar 1
+pop temp 0
+push constant 62
+call Output.printChar 1
+pop temp 0
+push local 0
+call MapNode.getNext 1
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 40
+call Output.printChar 1
+pop temp 0
+push local 0
+call MapNode.getKey 1
+call Output.printInt 1
+pop temp 0
+push constant 44
+call Output.printChar 1
+pop temp 0
+push local 0
+call MapNode.getVal 1
+call Output.printInt 1
+pop temp 0
+push constant 41
+call Output.printChar 1
+pop temp 0
+push constant 0
+return
+function MapNode.dispose 2
+push argument 0
+pop pointer 0
+push pointer 0
+pop local 0
+push local 0
+call MapNode.getNext 1
+pop local 1
+label WHILE_EXP0
+push local 1
+push constant 0
+eq
+not
+not
+if-goto WHILE_END0
+push local 0
+call Memory.deAlloc 1
+pop temp 0
+push local 1
+pop local 0
+push local 1
+call MapNode.getNext 1
+pop local 1
+goto WHILE_EXP0
+label WHILE_END0
+push local 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return

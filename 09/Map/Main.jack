@@ -1,0 +1,29 @@
+/** Map class driver */
+class Main {
+    function void main() {
+        var Map lookup;
+        do Output.printString("Create a map with 3 buckets");
+        let lookup = Map.new(3);
+        do Output.println();
+        do Output.printString("Initial contents: ");
+        do Output.println();
+        do Output.printString("(1, 5), (11, 6), (21, 7), (2, 8)");
+        do Output.println();
+        do Output.println();
+        do lookup.set(1, 5);
+        do lookup.set(11, 6);
+        do lookup.set(21, 7);
+        do lookup.set(2, 8);
+        do Output.printString("Our map should now look like: ");
+        do Output.println();
+        do lookup.print();
+        do Output.println();
+        do Output.println();
+        do Output.printString("Setting (2, 30) gives us: ");
+        do lookup.set(2, 30);
+        do Output.println();
+        do lookup.print();
+        do lookup.dispose();
+        return;
+    }
+}

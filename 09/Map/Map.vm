@@ -1,0 +1,287 @@
+function Map.new 0
+push constant 2
+call Memory.alloc 1
+pop pointer 0
+push argument 0
+call Array.new 1
+pop this 0
+push argument 0
+pop this 1
+push pointer 0
+return
+function Map.get 1
+push argument 0
+pop pointer 0
+push pointer 0
+push argument 1
+call Map._retrieveNodeByKey 2
+pop local 0
+push local 0
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 2
+return
+label IF_FALSE0
+push local 0
+call MapNode.getVal 1
+return
+function Map.set 3
+push argument 0
+pop pointer 0
+push pointer 0
+push argument 1
+call Map._computeHash 2
+pop local 0
+push local 0
+push this 0
+add
+pop pointer 1
+push that 0
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 1
+push argument 2
+push constant 0
+call MapNode.new 3
+pop local 1
+push local 0
+push this 0
+add
+push local 1
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+goto IF_END0
+label IF_FALSE0
+push local 0
+push this 0
+add
+pop pointer 1
+push that 0
+pop local 2
+push local 2
+call MapNode.getKey 1
+push argument 1
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 2
+push argument 2
+call MapNode.setVal 2
+pop temp 0
+push constant 0
+return
+label IF_FALSE1
+label WHILE_EXP0
+push local 2
+call MapNode.getNext 1
+push constant 0
+eq
+not
+not
+if-goto WHILE_END0
+push local 2
+call MapNode.getNext 1
+pop local 2
+push local 2
+call MapNode.getKey 1
+push argument 1
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push local 2
+push argument 2
+call MapNode.setVal 2
+pop temp 0
+push constant 0
+return
+label IF_FALSE2
+goto WHILE_EXP0
+label WHILE_END0
+push local 2
+push argument 1
+push argument 2
+push constant 0
+call MapNode.new 3
+call MapNode.setNext 2
+pop temp 0
+label IF_END0
+push constant 0
+return
+function Map.keyExists 1
+push argument 0
+pop pointer 0
+push pointer 0
+push argument 1
+call Map._retrieveNodeByKey 2
+pop local 0
+push local 0
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
+push constant 0
+not
+return
+function Map._retrieveNodeByKey 2
+push argument 0
+pop pointer 0
+push pointer 0
+push argument 1
+call Map._computeHash 2
+push this 0
+add
+pop pointer 1
+push that 0
+pop local 0
+push local 0
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
+push local 0
+pop local 1
+label WHILE_EXP0
+push local 1
+push constant 0
+eq
+not
+not
+if-goto WHILE_END0
+push local 1
+call MapNode.getKey 1
+push argument 1
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 1
+return
+label IF_FALSE1
+push local 1
+call MapNode.getNext 1
+pop local 1
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Map._computeHash 0
+push argument 0
+pop pointer 0
+push argument 1
+push this 1
+push argument 1
+push this 1
+call Math.divide 2
+call Math.multiply 2
+sub
+return
+function Map.print 2
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+push constant 91
+call Output.printChar 1
+pop temp 0
+call Output.println 0
+pop temp 0
+label WHILE_EXP0
+push local 0
+push this 1
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 0
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+call Output.printInt 1
+pop temp 0
+goto IF_END0
+label IF_FALSE0
+push local 1
+call MapNode.printChain 1
+pop temp 0
+label IF_END0
+push constant 44
+call Output.printChar 1
+pop temp 0
+call Output.println 0
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 93
+call Output.printChar 1
+pop temp 0
+push constant 0
+return
+function Map.dispose 2
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push this 1
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 0
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+push constant 0
+eq
+not
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push local 1
+call MapNode.dispose 1
+pop temp 0
+label IF_FALSE0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
