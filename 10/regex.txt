@@ -1,0 +1,49 @@
+Full Grammar:
+
+http://nand2tetris-questions-and-answers-forum.32033.n3.nabble.com/file/n4032358/JackSyntax-1.html
+
+Regex:
+
+(?:\/\*\*[\S\s]*?\*\/)          # Block Comments
+(?:\/\/.*$)                     # Inline Comment
+(class|constructor|function|    # Keywords
+method|field|static|var|int|
+char|boolean|void|true|false|
+null|this|let|do|if|else|
+while|return)
+(\{|\}|\(|\)|\[|\]|\.|\,|\;|    # Symbols
+\+|\-|\*|\/|\&|\||\<|\>|\=|\~)
+((?<=\").*(?=\"))               # String Constants
+((?:[_a-zA-Z]+)                 # Identifiers
+(?:[_a-zA-Z0-9]?))
+([0-9]+)                        # Integer Constants
+
+
+(class|function)
+|
+({|}|\(|\))
+|
+(\".*\")
+|
+
+((?:[_a-zA-Z]+)(?:[_a-zA-Z0-9]+))
+
+|
+([0-9]+)
+
+class|constructor|function|method|field|static|var|int|char|boolean|void|true|false|null|this|let|do|if|else|while|return
+
+(class|constructor|function|method|field|static|var|int|char|boolean|void|true|false|null|this|let|do|if|else|while|return)|(;|{|}|\(|\))|((?:[_a-zA-Z]+)(?:[_a-zA-Z0-9]?))|([0-9]+)
+
+(class|constructor|function|method|field|static|var|int|char|boolean|void|true|false|null|this|let|do|if|else|while|return)|(=|;|{|}|\(|\))|((?:[_a-zA-Z]+)(?:[_a-zA-Z0-9]?))|([0-9]+)
+
+(class|constructor|function|method|field|static|var|int|char|boolean|void|true|false|null|this|let|do|if|else|while|return)|(=|;|{|}|\(|\))|(\".*\")|((?:[_a-zA-Z]+)(?:[_a-zA-Z0-9]?))|([0-9]+)
+
+(class|constructor|function|method|field|static|var|int|char|boolean|void|true|false|null|this|let|do|if|else|while|return)|(=|;|{|}|\(|\))|(\".*\")|((?:[_a-zA-Z]+)(?:[_a-zA-Z0-9]?))|([0-9]+)
+
+
+(?:\/\*\*[\S\s]*?\*\/)|(?:\/\/.*$)|(class|constructor|function|method|field|static|var|int|char|boolean|void|true|false|null|this|let|do|if|else|while|return)|(\/|\.|=|;|{|}|\(|\))|(\".*\")|((?:[_a-zA-Z]+)(?:[_a-zA-Z0-9]?))|([0-9]+)
+
+(?:\/\*\*[\S\s]*?\*\/)|(?:\/\/.*$)|(class|constructor|function|method|field|static|var|int|char|boolean|void|true|false|null|this|let|do|if|else|while|return)|(\{|\}|\(|\)|\[|\]|\.|\,|\;|\+|\-|\*|\/|\&|\||\<|\>|\=|\~)|(\".*\")|((?:[_a-zA-Z]+)(?:[_a-zA-Z0-9]?))|([0-9]+)
+
+(?:\/\*\*[\S\s]*?\*\/)|(?:\/\/.*$)|(class|constructor|function|method|field|static|var|int|char|boolean|void|true|false|null|this|let|do|if|else|while|return)|(\{|\}|\(|\)|\[|\]|\.|\,|\;|\+|\-|\*|\/|\&|\||\<|\>|\=|\~)|(\".*\")|((?:[_a-zA-Z]+)(?:[_a-zA-Z0-9]?))|([0-9]+)
